@@ -4,11 +4,11 @@ HTaGram is a lightweight, modular Telegram userbot built with Telethon. It's des
 
 ## Features
 
-- 🚀 **Lightweight** - Minimal resource usage
-- 📦 **Modular** - Easy to add/remove modules
-- 🔧 **Simple setup** - Just enter API credentials
-- 💾 **Persistent** - Saves your API values
-- 🔄 **Auto-restart** - Automatically restarts after module changes
+- **Lightweight** - Minimal resource usage
+- **Modular** - Easy to add/remove modules
+- **Simple setup** - Just enter API credentials
+- **Persistent** - Saves your API values
+-  **Auto-restart** - Automatically restarts after module changes
 
 ## Requirements
 
