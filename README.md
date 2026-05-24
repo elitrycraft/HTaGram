@@ -19,7 +19,7 @@ HTaGram is a lightweight, modular Telegram userbot built with Telethon. It's des
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/htagram.git
+git clone https://github.com/elitrycraft/htagram.git
 cd htagram
 
 # Install dependencies
