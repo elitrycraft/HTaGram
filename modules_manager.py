@@ -1,0 +1,32 @@
+import os
+import importlib
+import asyncio
+from pathlib import Path
+import json
+
+async def load_modules(client, restart_userbot):
+    modules_dir = 'modules'
+    tasks = []
+    disabled_modules = []
+    disabled_modules_path = Path('disabled_modules.json')
+    if disabled_modules_path.is_file():
+        with open("disabled_modules.json", "r", encoding="utf-8") as f:
+            disabled_modules = json.load(f)
+    
+    for file in os.listdir(modules_dir):
+        if file.endswith('.py') and file != '__init__.py' and file != 'main.py':
+            if file in disabled_modules:
+                print(f"Module is not loaded {module_name}, because it's disabled")
+                return
+            module_name = file[:-3]
+            try:
+                module = importlib.import_module(f'{modules_dir}.{module_name}')
+                if hasattr(module, 'run'):
+                    print(f"Module is loaded {module_name}")
+                    task = asyncio.create_task(module.run(client, restart_userbot))
+                    tasks.append(task)
+            except Exception as e:
+                print(f"Error in {module_name}: {e}")
+    
+    if tasks:
+        await asyncio.gather(*tasks)
