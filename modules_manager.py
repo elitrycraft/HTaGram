@@ -17,7 +17,7 @@ async def load_modules(client, restart_userbot):
         if file.endswith('.py') and file != '__init__.py' and file != 'main.py':
             if file in disabled_modules:
                 print(f"Module is not loaded {module_name}, because it's disabled")
-                return
+                continue
             module_name = file[:-3]
             try:
                 module = importlib.import_module(f'{modules_dir}.{module_name}')
