@@ -5,6 +5,8 @@ import importlib
 import sys
 from contextlib import contextmanager
 import io
+import ast
+from telethon.errors import MessageNotModifiedError
 
 dep = []
 
@@ -28,7 +30,7 @@ async def run(client, restart_userbot):
                 with open(file_path, 'r', encoding='utf-8') as f:
                     for line in f:
                         if line.startswith('dep = '):
-                            deps = eval(line.split('=')[1].strip())
+                            deps = ast.literal_eval(line.split('=')[1].strip())
                             break
                 if deps:
                     await event.edit(f"Installing dependencies for module {reply.file.name}...")
@@ -36,11 +38,11 @@ async def run(client, restart_userbot):
                         process = await asyncio.create_subprocess_exec(sys.executable, "-m", "pip", "install", deepend)
                         await process.wait()
                         await event.edit(f"Installed {deepend} for module {reply.file.name}...")
-
-                module = None
-                with ignore_import_errors():
-                    module = importlib.import_module(f"modules.{reply.file.name[:-3]}")
-                await event.edit(f"Module {reply.file.name} installed. Restarting userbot.")
+                try:
+                    await event.edit(f"Module {reply.file.name} installed. Restarting userbot.")
+                    await asyncio.sleep(0.5)
+                except MessageNotModifiedError:
+                    pass
                 await restart_userbot()
             else:
                 await event.delete()
