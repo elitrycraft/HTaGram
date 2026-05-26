@@ -5,6 +5,7 @@ import sys, os
 import sqlite3
 import warnings
 import asyncio
+import subprocess
 warnings.filterwarnings("ignore", category=UserWarning, module="telethon")
 
 api_id = None
@@ -44,7 +45,7 @@ else:
     api_hash = str(input("Write API HASH: "))
 
     with open("api_id.txt", "w", encoding="utf-8") as file:
-        file.write(api_id)
+        file.write(str(api_id))
 
 
     with open("api_hash.txt", "w", encoding="utf-8") as file:
@@ -52,43 +53,19 @@ else:
 
     print("API values are saved")
 
-def check_telegram():
-    url = "https://telegram.org"
-    
-    try:
-        response = requests.get(url, timeout=5)
-
-        if response.status_code < 400:
-            return True
-        else:
-            return False
-            
-    except requests.ConnectionError:
-        return False
-    except requests.Timeout:
-        return False
-    except requests.RequestException as e:
-        return False
-
 tg_client = None
 
 def restart_userbot():
-    python = sys.executable
-    os.execl(python, python, *sys.argv)
+    subprocess.Popen([sys.executable] + sys.argv)
+    os._exit(0)
 
-if check_telegram() == True:
-    print("Direct connection to Telegram successful")
-    with telethon.TelegramClient('HTGRAN CLIENT', api_id, api_hash) as client:
-        tg_client = client
-        import modules_manager
-        client.loop.run_until_complete(modules_manager.load_modules(client, restart_userbot))
-        client.run_until_disconnected()
-else:
-    print("Direct connection to Telegram is unsuccessful")
+async def ConnectToTelegram():
+    global tg_client
+    client = telethon.TelegramClient('HTGRAN CLIENT', api_id, api_hash)
+    await client.start()
+    tg_client = client
+    import modules_manager
+    await modules_manager.load_modules(client, restart_userbot)
+    await client.run_until_disconnected()
 
-
-while True:
-    try:
-        pass
-    except KeyboardInterrupt:
-        break
+asyncio.run(ConnectToTelegram())
