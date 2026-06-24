@@ -32,4 +32,5 @@ python main.py
 ## Previews
 
 ![HTaGram Modules Preview](previews/preview.png)
+
 ![HTaGram Modules Preview](previews/preview_start.png)
