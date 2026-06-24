@@ -26,4 +26,4 @@ cd htagram
 pip install -r requirements.txt
 
 # Run the userbot
-python main.py
+python main.py```
